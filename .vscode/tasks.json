@@ -1,0 +1,12 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "Clear Terminal",
+        "type": "shell",
+        // "command": "clear", // For Unix-based systems like Linux and macOS
+        "command": "cls", // For Windows
+        "problemMatcher": []
+      }
+    ]
+  }
