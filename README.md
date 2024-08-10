@@ -1,2 +1,2 @@
-# DSA-Udemy-
+# DSA-Udemy
 DSA Course Code
