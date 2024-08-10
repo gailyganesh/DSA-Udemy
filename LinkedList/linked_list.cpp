@@ -201,6 +201,83 @@ bool LinkedList::insert(int index, int value)
     return true;
 }
 
+void LinkedList::deleteNode(int index)
+{
+    if(index<0 || index >= mLength)
+    {
+        return;
+    }
+    else if(index == 0)
+    {
+       return deleteFirst();
+    }
+    else if(index == mLength-1)
+    {
+        return deleteLast();
+    }
+    else
+    {
+        auto preNode = get(index-1);
+        auto temp = preNode->next;
+        preNode->next = temp->next;
+        delete temp;
+        mLength--;
+    }
+}
+
+void LinkedList::reverse_on2()
+{
+    if(mLength<=1) return;
+    for(int i=mLength-1; i>=0; i--)
+    {
+        Node* current = get(i);
+        Node* pre = get(i-1);
+        current->next = pre;
+    }
+    Node* temp = mHead;
+    mHead = mTail;
+    mTail = temp;
+}
+
+void LinkedList::reverse()
+{
+    if(mLength<=1) return;
+    Node* temp = mHead;
+    mHead = mTail;
+    mTail = temp;
+    Node* before = nullptr;
+    Node* after = nullptr;
+    for (int i=0; i<mLength;++i)
+    {
+        after = temp->next;
+        temp->next = before;
+        before = temp;
+        temp = after;
+    }
+}
+
+Node* LinkedList::findMiddleNode()
+{
+    if(mHead == nullptr) return nullptr;
+    
+    int length=0;
+    Node* temp1 = mHead;
+    while(temp1)
+    {
+        temp1 = temp1->next;
+        length++;
+    }
+    int index = length/2;
+    int i = 0;
+    Node* temp = mHead;
+    while(i < index)
+    {
+        temp = temp->next;
+        i++;
+    }
+    return temp;
+}
+
 // Function to convert nullptr to 0 for comparison
 auto ptrToNum = [](Node* ptr) -> string {
     return (ptr == nullptr) ? "0 (nullptr)" : std::to_string(ptr->value);
@@ -753,6 +830,102 @@ int main() {
         ll.printList();
         
         checkTestResult(!result);
+    }
+
+    // Test 1: ReverseMultipleElementList
+    {
+        cout << "\n------ LinkedList Test: ReverseMultipleElementList ------\n";
+
+        LinkedList ll(1);
+        ll.append(2);
+        ll.append(3);
+
+        cout << "Before: ";
+        ll.printList();
+
+        ll.reverse();
+
+        cout << "After: ";
+        ll.printList();
+
+        checkTestResult(ll.getHead()->value == 3 && ll.getTail()->value == 1 && ll.getLength() == 3);
+    }
+
+    // Test 2: ReverseSingleElement
+    {
+        cout << "\n------ LinkedList Test: ReverseSingleElement ------\n";
+
+        LinkedList ll(1);
+
+        cout << "Before: ";
+        ll.printList();
+
+        ll.reverse();
+
+        cout << "After: ";
+        ll.printList();
+
+        checkTestResult(ll.getHead()->value == 1 && ll.getTail()->value == 1 && ll.getLength() == 1);
+    }
+
+    // Test 3: ReverseListWithTwoElements
+    {
+        cout << "\n------ LinkedList Test: ReverseListWithTwoElements ------\n";
+
+        LinkedList ll(1);
+        ll.append(2);
+
+        cout << "Before: ";
+        ll.printList();
+
+        ll.reverse();
+
+        cout << "After: ";
+        ll.printList();
+
+        checkTestResult(ll.getHead()->value == 2 && ll.getTail()->value == 1 && ll.getLength() == 2);
+    }
+
+    // Test 4: ReverseListMultipleTimes
+    {
+        cout << "\n------ LinkedList Test: ReverseListTwice ------\n";
+
+        LinkedList ll(1);
+        ll.append(2);
+        ll.append(3);
+
+        cout << "Before: ";
+        ll.printList();
+
+        ll.reverse();
+        ll.reverse();
+
+        cout << "After: ";
+        ll.printList();
+
+        checkTestResult(ll.getHead()->value == 1 && ll.getTail()->value == 3 && ll.getLength() == 3);
+    }
+
+    // Test 5: CheckIntegrityAfterReverse
+    {
+        cout << "\n------ LinkedList Test: CheckIntegrityAfterReverse ------\n";
+
+        LinkedList ll(1);
+        ll.append(2);
+        ll.append(3);
+
+        cout << "Before: ";
+        ll.printList();
+
+        ll.reverse();
+
+        cout << "After: ";
+        ll.printList();
+
+        Node* head = ll.getHead();
+        bool result = head->value == 3 && head->next->value == 2 && head->next->next->value == 1 && head->next->next->next == nullptr;
+
+        checkTestResult(result);
     }
 
     return 0;

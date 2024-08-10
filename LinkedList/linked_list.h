@@ -30,9 +30,16 @@ class LinkedList
 
         //O(n)
         Node* get(int index);
+        //O(n)
         bool set(int index, int value);
 
+        //O(n)
         bool insert(int index, int value);
-        void remove(int index);
-        void reverse();
+        //O(n)
+        void deleteNode(int index);
+
+        void reverse(); // implement with O(n)
+        void reverse_on2(); // implemented without thinking simple solution O(n^2)
+
+        Node* findMiddleNode(); // without using mLength
 };
