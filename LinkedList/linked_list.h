@@ -32,7 +32,7 @@ class LinkedList
         Node* get(int index);
         bool set(int index, int value);
 
-        void insert(int index, int value);
+        bool insert(int index, int value);
         void remove(int index);
         void reverse();
 };

@@ -178,6 +178,29 @@ bool LinkedList::set(int index, int value)
     return false;
 }
 
+bool LinkedList::insert(int index, int value)
+{
+    if(index<0 || index>mLength) return false;
+    else if(index==0)
+    {
+        prepend(value);
+    }
+    else if(index == mLength)
+    {
+        append(value);
+    }
+    else
+    {
+        Node* newNode = new Node(value);
+        auto preNode = get(index-1);
+        if(!preNode) return false;
+        newNode->next = preNode->next;
+        preNode->next = newNode;
+        mLength++;
+    }
+    return true;
+}
+
 // Function to convert nullptr to 0 for comparison
 auto ptrToNum = [](Node* ptr) -> string {
     return (ptr == nullptr) ? "0 (nullptr)" : std::to_string(ptr->value);
@@ -611,6 +634,125 @@ int main() {
         
         bool result = (ll.get(0)->value == 1) && (ll.get(2)->value == 3);
         checkTestResult(result);
+    }
+
+     // Test 1: InsertAtBeginning
+    {
+        cout << "\n------ LinkedList Test: InsertAtBeginning ------\n";
+        
+        LinkedList ll(1);
+        ll.append(2);
+        
+        cout << "Before: ";
+        ll.printList();
+        
+        bool result = ll.insert(0, 0);
+        
+        cout << "insert( 0, 0 )\n";
+        
+        cout << "After: ";
+        ll.printList();
+        
+        checkTestResult(result && ll.get(0)->value == 0); 
+    }
+
+    // Test 2: InsertAtEnd
+    {
+        cout << "\n------ LinkedList Test: InsertAtEnd ------\n";
+        
+        LinkedList ll(1);
+        ll.append(2);
+        
+        cout << "Before: ";
+        ll.printList();
+        
+        bool result = ll.insert(2, 3);
+        
+        cout << "insert( 2, 3 )\n";
+        
+        cout << "After: ";
+        ll.printList();
+        
+        checkTestResult(result && ll.get(2)->value == 3);
+    }
+
+    // Test 3: InsertInMiddle
+    {
+        cout << "\n------ LinkedList Test: InsertInMiddle ------\n";
+        
+        LinkedList ll(1);
+        ll.append(3);
+        
+        cout << "Before: ";
+        ll.printList();
+        
+        bool result = ll.insert(1, 2);
+        
+        cout << "insert( 1, 2 )\n";
+        
+        cout << "After: ";
+        ll.printList();
+        
+        checkTestResult(result && ll.get(1)->value == 2);
+    }
+
+    // Test 4: InsertOutOfBounds
+    {
+        cout << "\n------ LinkedList Test: InsertOutOfBounds ------\n";
+        
+        LinkedList ll(1);
+        ll.append(2);
+        
+        cout << "Before: ";
+        ll.printList();
+        
+        bool result = ll.insert(3, 3);
+        
+        cout << "insert( 3, 3 )\n";
+        
+        cout << "After: ";
+        ll.printList();
+        
+        checkTestResult(!result);
+    }
+
+    // Test 5: InsertIntoEmptyList
+    {
+        cout << "\n------ LinkedList Test: InsertIntoEmptyList ------\n";
+        
+        LinkedList ll(1);
+        ll.makeEmpty();
+        
+        cout << "Before: ";
+        ll.printList();
+        
+        bool result = ll.insert(0, 1);
+        
+        cout << "insert( 0, 1 )\n";
+        
+        cout << "After: ";
+        ll.printList();
+        
+        checkTestResult(result && ll.get(0)->value == 1);
+    }
+
+    // Test 6: InsertInvalidIndexNegative
+    {
+        cout << "\n------ LinkedList Test: InsertInvalidIndexNegative ------\n";
+        
+        LinkedList ll(1);
+        
+        cout << "Before: ";
+        ll.printList();
+        
+        bool result = ll.insert(-1, 2);
+        
+        cout << "insert( -1, 2 )\n";
+        
+        cout << "After: ";
+        ll.printList();
+        
+        checkTestResult(!result);
     }
 
     return 0;
