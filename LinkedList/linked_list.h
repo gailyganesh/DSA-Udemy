@@ -41,5 +41,9 @@ class LinkedList
         void reverse(); // implement with O(n)
         void reverse_on2(); // implemented without thinking simple solution O(n^2)
 
-        Node* findMiddleNode(); // without using mLength
+        Node* findMiddleNode_on2(); // without using mLength my implementation O(n^2)
+
+        //using Floyd's cycle algo
+        Node* findMiddleNode(); // O(n) from the solution
+        bool hasLoop();
 };

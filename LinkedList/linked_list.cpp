@@ -256,7 +256,7 @@ void LinkedList::reverse()
     }
 }
 
-Node* LinkedList::findMiddleNode()
+Node* LinkedList::findMiddleNode_on2()
 {
     if(mHead == nullptr) return nullptr;
     
@@ -276,6 +276,34 @@ Node* LinkedList::findMiddleNode()
         i++;
     }
     return temp;
+}
+
+Node* LinkedList::findMiddleNode()
+{
+    auto fast = mHead;
+    auto slow = mHead;
+    while(fast != nullptr && fast->next != nullptr)
+    {
+        fast = fast->next->next;
+        slow = slow->next;
+    }
+    return slow;
+}
+
+bool LinkedList::hasLoop()
+{
+    auto fast = mHead;
+    auto slow = mHead;
+    while(fast != nullptr && fast->next != nullptr)
+    {
+        fast = fast->next->next;
+        slow = slow->next;
+        if(fast == slow)
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
 // Function to convert nullptr to 0 for comparison
