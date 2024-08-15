@@ -290,6 +290,7 @@ Node* LinkedList::findMiddleNode()
     return slow;
 }
 
+//floyd's algorithm
 bool LinkedList::hasLoop()
 {
     auto fast = mHead;
@@ -304,6 +305,27 @@ bool LinkedList::hasLoop()
         }
     }
     return false;
+}
+
+Node* LinkedList::findKthFromEnd(int k)
+{
+    Node* measurementEnd=mHead;
+    Node* measurementStart=mHead;
+    for(int i=0; i<k; i++)
+    {
+        if(measurementEnd==nullptr)
+        {
+            return nullptr;
+        }
+        measurementEnd=measurementEnd->next;
+    }
+    if(k<0) return nullptr;
+    while(measurementEnd)
+    {
+        measurementStart=measurementStart->next;
+        measurementEnd=measurementEnd->next;
+    }
+    return measurementStart;
 }
 
 // Function to convert nullptr to 0 for comparison

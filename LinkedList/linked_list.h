@@ -46,4 +46,5 @@ class LinkedList
         //using Floyd's cycle algo
         Node* findMiddleNode(); // O(n) from the solution
         bool hasLoop();
+        Node* findKthFromEnd(int k);
 };
