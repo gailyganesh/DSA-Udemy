@@ -2,12 +2,12 @@
 
 using namespace std;
 
-class Node { 
+class LinkedListNode { 
     public:
         int value;
-        Node* next;
+        LinkedListNode* next;
 
-        Node(int value) {
+        LinkedListNode(int value) {
             this->value = value;
             next = nullptr;
         }

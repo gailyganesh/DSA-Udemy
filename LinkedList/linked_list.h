@@ -4,8 +4,8 @@
 class LinkedList
 {
     private:
-        Node* mHead;
-        Node* mTail;
+        LinkedListNode* mHead;
+        LinkedListNode* mTail;
         int mLength;
     public:
         LinkedList(int value);
@@ -14,8 +14,8 @@ class LinkedList
         void printHead();
         void printTail();
         void printLength();
-        Node* getHead();
-        Node* getTail();
+        LinkedListNode* getHead();
+        LinkedListNode* getTail();
         int getLength();
         void makeEmpty();
 
@@ -29,7 +29,7 @@ class LinkedList
         void deleteFirst();
 
         //O(n)
-        Node* get(int index);
+        LinkedListNode* get(int index);
         //O(n)
         bool set(int index, int value);
 
@@ -41,10 +41,10 @@ class LinkedList
         void reverse(); // implement with O(n)
         void reverse_on2(); // implemented without thinking simple solution O(n^2)
 
-        Node* findMiddleNode_on2(); // without using mLength my implementation O(n^2)
+        LinkedListNode* findMiddleNode_on2(); // without using mLength my implementation O(n^2)
 
         //using Floyd's cycle algo
-        Node* findMiddleNode(); // O(n) from the solution
+        LinkedListNode* findMiddleNode(); // O(n) from the solution
         bool hasLoop();
-        Node* findKthFromEnd(int k);
+        LinkedListNode* findKthFromEnd(int k);
 };

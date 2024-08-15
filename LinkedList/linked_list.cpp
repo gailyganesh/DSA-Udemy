@@ -4,7 +4,7 @@
 using namespace std;
 
 LinkedList::LinkedList(int value) {
-    mHead = new Node(value);
+    mHead = new LinkedListNode(value);
     mTail = mHead;
     mLength = 1;
 }
@@ -15,7 +15,7 @@ LinkedList::~LinkedList() {
 
 void LinkedList::makeEmpty()
 {
-    Node* temp = mHead;
+    LinkedListNode* temp = mHead;
     while(temp)
     {
         mHead=mHead->next;
@@ -33,7 +33,7 @@ void LinkedList::makeEmpty()
 
 void LinkedList::printList()
 {
-    Node* temp = mHead;
+    LinkedListNode* temp = mHead;
     std::cout << "[";
     while(temp)
     {
@@ -62,12 +62,12 @@ void LinkedList::printLength()
     std::cout << "Length: " << mLength << std::endl;
 }
 
-Node* LinkedList::getHead()
+LinkedListNode* LinkedList::getHead()
 {
     return mHead;
 }
 
-Node* LinkedList::getTail()
+LinkedListNode* LinkedList::getTail()
 {
     return mTail;
 }
@@ -79,7 +79,7 @@ int LinkedList::getLength()
 
 void LinkedList::append(int value)
 {
-    Node* newNode = new Node(value);
+    LinkedListNode* newNode = new LinkedListNode(value);
     if(mLength==0)
     {
         mTail = newNode;
@@ -106,7 +106,7 @@ void LinkedList::deleteLast()
     }
     else
     {
-        Node* temp = mHead;
+        LinkedListNode* temp = mHead;
         while(temp->next!=mTail)
         {
             temp=temp->next;
@@ -120,7 +120,7 @@ void LinkedList::deleteLast()
 
 void LinkedList::prepend(int value)
 {
-    Node* newNode = new Node(value);
+    LinkedListNode* newNode = new LinkedListNode(value);
     if(mLength==0)
     {
         mHead=newNode;
@@ -146,20 +146,20 @@ void LinkedList::deleteFirst()
     }
     else
     {
-        Node* temp = mHead;
+        LinkedListNode* temp = mHead;
         mHead = mHead->next;
         delete temp;
         mLength--;
     }
 }
 
-Node* LinkedList::get(int index)
+LinkedListNode* LinkedList::get(int index)
 {
     if(index < 0 || index >= mLength)
     {
         return nullptr;
     }
-    Node* temp = mHead;
+    LinkedListNode* temp = mHead;
     for (int i=0; i<index; ++i)
     {
         temp=temp->next;
@@ -169,7 +169,7 @@ Node* LinkedList::get(int index)
 
 bool LinkedList::set(int index, int value)
 {
-    Node* temp = get(index);
+    LinkedListNode* temp = get(index);
     if(temp)
     {
         temp->value=value;
@@ -191,7 +191,7 @@ bool LinkedList::insert(int index, int value)
     }
     else
     {
-        Node* newNode = new Node(value);
+        LinkedListNode* newNode = new LinkedListNode(value);
         auto preNode = get(index-1);
         if(!preNode) return false;
         newNode->next = preNode->next;
@@ -230,11 +230,11 @@ void LinkedList::reverse_on2()
     if(mLength<=1) return;
     for(int i=mLength-1; i>=0; i--)
     {
-        Node* current = get(i);
-        Node* pre = get(i-1);
+        LinkedListNode* current = get(i);
+        LinkedListNode* pre = get(i-1);
         current->next = pre;
     }
-    Node* temp = mHead;
+    LinkedListNode* temp = mHead;
     mHead = mTail;
     mTail = temp;
 }
@@ -242,11 +242,11 @@ void LinkedList::reverse_on2()
 void LinkedList::reverse()
 {
     if(mLength<=1) return;
-    Node* temp = mHead;
+    LinkedListNode* temp = mHead;
     mHead = mTail;
     mTail = temp;
-    Node* before = nullptr;
-    Node* after = nullptr;
+    LinkedListNode* before = nullptr;
+    LinkedListNode* after = nullptr;
     for (int i=0; i<mLength;++i)
     {
         after = temp->next;
@@ -256,12 +256,12 @@ void LinkedList::reverse()
     }
 }
 
-Node* LinkedList::findMiddleNode_on2()
+LinkedListNode* LinkedList::findMiddleNode_on2()
 {
     if(mHead == nullptr) return nullptr;
     
     int length=0;
-    Node* temp1 = mHead;
+    LinkedListNode* temp1 = mHead;
     while(temp1)
     {
         temp1 = temp1->next;
@@ -269,7 +269,7 @@ Node* LinkedList::findMiddleNode_on2()
     }
     int index = length/2;
     int i = 0;
-    Node* temp = mHead;
+    LinkedListNode* temp = mHead;
     while(i < index)
     {
         temp = temp->next;
@@ -278,7 +278,7 @@ Node* LinkedList::findMiddleNode_on2()
     return temp;
 }
 
-Node* LinkedList::findMiddleNode()
+LinkedListNode* LinkedList::findMiddleNode()
 {
     auto fast = mHead;
     auto slow = mHead;
@@ -307,10 +307,10 @@ bool LinkedList::hasLoop()
     return false;
 }
 
-Node* LinkedList::findKthFromEnd(int k)
+LinkedListNode* LinkedList::findKthFromEnd(int k)
 {
-    Node* measurementEnd=mHead;
-    Node* measurementStart=mHead;
+    LinkedListNode* measurementEnd=mHead;
+    LinkedListNode* measurementStart=mHead;
     for(int i=0; i<k; i++)
     {
         if(measurementEnd==nullptr)
@@ -329,7 +329,7 @@ Node* LinkedList::findKthFromEnd(int k)
 }
 
 // Function to convert nullptr to 0 for comparison
-auto ptrToNum = [](Node* ptr) -> string {
+auto ptrToNum = [](LinkedListNode* ptr) -> string {
     return (ptr == nullptr) ? "0 (nullptr)" : std::to_string(ptr->value);
 };
 
@@ -604,7 +604,7 @@ int main() {
         int index = 1;
         cout << "Get node at index: " << index << endl;
         
-        Node* result = ll.get(index);
+        LinkedListNode* result = ll.get(index);
         
         cout << "Value of returned node: " << result->value << endl;
     }
@@ -620,7 +620,7 @@ int main() {
         int index = 0;
         cout << "Get node at index: " << index << endl;
         
-        Node* result = ll.get(index);
+        LinkedListNode* result = ll.get(index);
         
         cout << "Value of returned node: " << result->value << endl;
     }
@@ -637,7 +637,7 @@ int main() {
         int index = 0;
         cout << "Get node at index: " << index << endl;
         
-        Node* result = ll.get(index);
+        LinkedListNode* result = ll.get(index);
         
         cout << "Value of returned node: " << ptrToNum(result) << endl;
     }
@@ -655,7 +655,7 @@ int main() {
         int index = 3;
         cout << "Get node at index: " << index << endl;
         
-        Node* result = ll.get(index);
+        LinkedListNode* result = ll.get(index);
         
         cout << "Value of returned node: " << ptrToNum(result) << endl;
     }
@@ -972,7 +972,7 @@ int main() {
         cout << "After: ";
         ll.printList();
 
-        Node* head = ll.getHead();
+        LinkedListNode* head = ll.getHead();
         bool result = head->value == 3 && head->next->value == 2 && head->next->next->value == 1 && head->next->next->next == nullptr;
 
         checkTestResult(result);
