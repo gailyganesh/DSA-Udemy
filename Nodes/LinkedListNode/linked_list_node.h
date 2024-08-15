@@ -1,3 +1,5 @@
+#pragma once
+
 #include <iostream>
 
 using namespace std;
@@ -11,4 +13,4 @@ class LinkedListNode {
             this->value = value;
             next = nullptr;
         }
-}; 
+};
