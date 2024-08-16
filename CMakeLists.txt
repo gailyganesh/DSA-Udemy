@@ -10,4 +10,5 @@ project(DSA_Course)
 set(CMAKE_INSTALL_PREFIX ${CMAKE_SOURCE_DIR}/bin CACHE PATH "Install path" FORCE)
 
 add_subdirectory(LinkedList)
+add_subdirectory(DoublyLinkedList)
 add_subdirectory(Nodes)

@@ -84,7 +84,6 @@ void LinkedList::append(int value)
     {
         mTail = newNode;
         mHead = mTail;
-        return;
     }
     else
     {
