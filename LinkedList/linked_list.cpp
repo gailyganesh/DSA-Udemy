@@ -49,12 +49,12 @@ void LinkedList::printList()
 
 void LinkedList::printHead()
 {
-    std::cout << "Head: " << mHead->value << std::endl;
+    if(mHead) std::cout << "Head: " << mHead->value << std::endl;
 }
 
 void LinkedList::printTail()
 {
-    std::cout << "Tail: " << mTail->value << std::endl;
+    if(mTail) std::cout << "Tail: " << mTail->value << std::endl;
 }
 
 void LinkedList::printLength()

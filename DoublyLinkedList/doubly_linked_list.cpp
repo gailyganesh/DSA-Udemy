@@ -49,12 +49,12 @@ void DoublyLinkedList::printList()
 
 void DoublyLinkedList::printHead()
 {
-    std::cout << "Head: " << mHead->value << std::endl;
+    if(mHead) std::cout << "Head: " << mHead->value << std::endl;
 }
 
 void DoublyLinkedList::printTail()
 {
-    std::cout << "Tail: " << mTail->value << std::endl;
+    if(mTail) std::cout << "Tail: " << mTail->value << std::endl;
 }
 
 void DoublyLinkedList::printLength()
