@@ -1,2 +1,3 @@
 add_subdirectory(LinkedListNode)
 add_subdirectory(DoublyLinkedListNode)
+add_subdirectory(BSTNode)
