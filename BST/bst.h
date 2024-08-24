@@ -3,9 +3,6 @@
 #include <iostream>
 #include "bst_node.h"
 
-
-//BST implementation here done with linked list we can also do with vector
-//remember always point nullptr towards end
 class BST
 {
     private:
