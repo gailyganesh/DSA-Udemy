@@ -38,7 +38,7 @@ void LinkedList::printList()
     while(temp)
     {
         std::cout << temp->value;
-        if(temp != mTail)
+        if(temp->next)
         {
             std::cout << ", ";
         }
@@ -327,6 +327,45 @@ LinkedListNode* LinkedList::findKthFromEnd(int k)
     return measurementStart;
 }
 
+void LinkedList::partitionList(int x)
+{
+    if(mHead==nullptr) return;
+    LinkedListNode* dummy_head = nullptr;
+    LinkedListNode* dummyItr = dummy_head;
+    LinkedListNode* lessItr=mHead;
+    LinkedListNode* prevItr=nullptr;
+    while(lessItr)
+    {
+        if(lessItr->value<x)
+        {
+            prevItr=lessItr;
+            lessItr=lessItr->next;
+        }
+        else
+        {
+            if(prevItr!=nullptr)
+            {
+                prevItr->next=lessItr->next;
+            }
+            if(dummy_head == nullptr)
+            {
+                dummyItr=lessItr;
+                dummy_head=dummyItr;
+            }
+            else
+            {
+                dummyItr->next=lessItr;
+                dummyItr=dummyItr->next;
+            }
+            lessItr=lessItr->next;
+            dummyItr->next=nullptr;
+        }
+    }
+    if(prevItr!=nullptr) prevItr->next=dummy_head;
+    else mHead = dummy_head;
+    mTail=dummyItr;
+}
+
 // Function to convert nullptr to 0 for comparison
 auto ptrToNum = [](LinkedListNode* ptr) -> string {
     return (ptr == nullptr) ? "0 (nullptr)" : std::to_string(ptr->value);
@@ -338,11 +377,26 @@ auto checkTestResult = [](bool condition) {
 };
 
 int main() {
+
+    //Test for partitionList Leetcode problem
     LinkedList* myList = new LinkedList(10);
     myList->printHead();
     myList->printTail();
     myList->printLength();
 
+    {
+        cout << "Ganesh output: " << std::endl;
+        LinkedList* mList = new LinkedList(1);
+        mList->append(4);
+        mList->append(3);
+        mList->append(2);
+        mList->append(5);
+        mList->append(2);
+        mList->printList();
+        mList->partitionList(9);
+        mList->printList();
+    }
+/*
     //Test for append
     // Test 1: Append To Non-Empty List
     {
@@ -976,6 +1030,6 @@ int main() {
 
         checkTestResult(result);
     }
-
+*/
     return 0;
 }
