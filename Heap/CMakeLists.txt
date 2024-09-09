@@ -1,6 +1,6 @@
-project(Graph)
+project(Heap)
 
-add_executable(${PROJECT_NAME} graph.cpp graph.h)
+add_executable(${PROJECT_NAME} heap.cpp heap.h)
 
 set_target_properties(${PROJECT_NAME}
     PROPERTIES

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <iostream>
-#include <unordered_map> //C++ implementation of the Graph
+#include <unordered_map>
 #include <unordered_set>
 
 class Graph {
