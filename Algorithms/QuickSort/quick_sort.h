@@ -5,57 +5,33 @@
 
 namespace Algorithms
 {
-void merge(int array[], int leftIdx, int middleIdx, int rightIdx)
-{
-    int leftArraySize = middleIdx - leftIdx+1;
-    int rightArraySize = rightIdx - middleIdx;
 
-    std::vector<int> leftArray(leftArraySize);
-    std::vector<int> rightArray(rightArraySize);
-    for (int i = leftIdx; i< leftArraySize; i++)
+void swap(int array[], int firstIndex, int secondIndex)
+{
+    int temp = array[firstIndex];
+    array[firstIndex] = array[secondIndex];
+    array[secondIndex] = temp;
+}
+int pivot(int array[], int pivotIdx, int endIdx)
+{
+    int swapIdx=pivotIdx;
+    for(int i=pivotIdx+1; i<=endIdx; i++)
     {
-        leftArray[i]=array[i];
-    }
-    for (int j = 0; j< rightArraySize; j++)
-    {
-        rightArray[j]=array[j+middleIdx+1];
-    }
-    int leftItr=0, rightItr=0;
-    while(leftItr<leftArraySize && rightItr<rightArraySize)
-    {
-        if(leftArray[leftItr] <= rightArray[rightItr])
+        if(array[i]<array[pivotIdx])
         {
-            array[leftIdx]=leftArray[leftItr];
-            leftItr++;
-            leftIdx++;
-        }
-        else
-        {
-            array[leftIdx]=rightArray[rightItr];
-            rightItr++;
-            leftIdx++;
+            swapIdx++;
+            swap(array, i, swapIdx);
         }
     }
-    while(leftItr!=leftArraySize)
-    {
-        array[leftIdx] = leftArray[leftItr];
-        leftItr++;
-        leftIdx++;
-    }
-    while(rightItr!=rightArraySize)
-    {
-        array[leftIdx]=rightArray[rightItr];
-        rightItr++;
-        leftIdx++;
-    }
+    swap(array, pivotIdx, swapIdx);
+    return swapIdx;
 }
 
-void mergeSort(int array[], int leftIndex, int rightIndex)
+void quickSort(int array[], int leftIndex, int rightIndex)
 {
-    if(leftIndex >= rightIndex) return;
-    int middleIndex = leftIndex+(rightIndex-leftIndex)/2;
-    mergeSort(array, leftIndex, middleIndex);
-    mergeSort(array, middleIndex+1, rightIndex);
-    merge(array, leftIndex, middleIndex, rightIndex);
+    if(leftIndex>=rightIndex) return;
+    auto pivotIdx = pivot(array,leftIndex,rightIndex);
+    quickSort(array,leftIndex,pivotIdx-1);
+    quickSort(array,pivotIdx+1, rightIndex);
 }
 } // Algorithms
