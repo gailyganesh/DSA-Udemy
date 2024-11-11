@@ -50,7 +50,12 @@
         "list": "cpp",
         "unordered_map": "cpp",
         "unordered_set": "cpp",
-        "xhash": "cpp"
+        "xhash": "cpp",
+        "queue": "cpp",
+        "functional": "cpp",
+        "deque": "cpp",
+        "sstream": "cpp",
+        "strstream": "cpp"
     },
     "notebook.formatOnSave.enabled": true,
     "editor.defaultFormatter": "xaver.clang-format",
