@@ -40,6 +40,7 @@ class LinkedList
         //O(n)
         void deleteNode(int index);
 
+/************************ leetcode problems ***************************************/
         //leetcode problems
         void reverse(); // implement with O(n)
         void reverse_on2(); // implemented without thinking simple solution O(n^2)
@@ -50,5 +51,8 @@ class LinkedList
         LinkedListNode* findMiddleNode(); // O(n) from the solution
         bool hasLoop();
         LinkedListNode* findKthFromEnd(int k);
-        void partitionList(int x);
+        void partitionList(int x); //node less than x comes before and greater than comes after
+        void removeDuplicates(); //use two pointer just like nested for loop.
+        int binaryToDecimal();
+        void reverseBetween(int m, int n);
 };

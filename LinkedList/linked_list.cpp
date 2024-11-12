@@ -366,6 +366,86 @@ void LinkedList::partitionList(int x)
     mTail=dummyItr;
 }
 
+void LinkedList::removeDuplicates()
+{
+    auto current=mHead;
+
+    while(current)
+    {
+        auto runner=current->next;
+        auto prev_runner = current;
+        while(runner)
+        {
+            if(current->value == runner->value)
+            {
+                //delete the runner
+                prev_runner->next = runner->next;
+                auto temp = runner;
+                runner=runner->next;
+                temp->next = nullptr;
+                delete temp;
+                mLength--;
+            }
+            else
+            {
+                prev_runner=runner;
+                runner=runner->next;
+            }
+        }
+        current = current->next;
+    }
+}
+
+int LinkedList::binaryToDecimal()
+{
+    int num=0;
+    auto current = mHead;
+    for(int i=mLength-1; i>=0; i--)
+    {
+        auto pow =std::pow(2,i);
+        num+=(current->value * pow);
+        current=current->next;
+    }
+    return num;
+}
+
+void LinkedList::reverseBetween(int m, int n)
+{
+    if(m==n) return;
+    auto mPtr=mHead;
+    auto nPtr=mHead;
+    LinkedListNode* mPrevPtr=nullptr;
+    if(mPtr && mPtr->next)
+    {
+        for(int i=0; i<n; i++)
+        {
+            if(i<m)
+            {
+                mPrevPtr = mPtr;
+                mPtr=mPtr->next;
+            }
+            nPtr=nPtr->next;
+        }
+        auto currentPtr=mPtr;
+        auto nextPtr=currentPtr->next;
+        auto rightPtr=nextPtr;
+        while(true)
+        {
+            rightPtr = nextPtr->next;
+            nextPtr->next = currentPtr;
+            currentPtr = nextPtr;
+            nextPtr = rightPtr;
+            if(currentPtr == nPtr)
+            {
+                break;
+            }
+        }
+        mPtr->next=nextPtr;
+        if(mPrevPtr) mPrevPtr->next=nPtr;
+        else mHead=nPtr;
+    }
+}
+
 // Function to convert nullptr to 0 for comparison
 auto ptrToNum = [](LinkedListNode* ptr) -> string {
     return (ptr == nullptr) ? "0 (nullptr)" : std::to_string(ptr->value);
@@ -377,6 +457,249 @@ auto checkTestResult = [](bool condition) {
 };
 
 int main() {
+
+    // Test: ReverseBetweenEmptyList
+    {
+        cout << "\n------ Test: ReverseBetweenEmptyList ------\n";
+        cout << "reverseBetween( 0, 2 )\n";
+        
+        LinkedList list(1);
+        list.makeEmpty();
+        
+        cout << "BEFORE:    ";
+        list.printList();
+        
+        list.reverseBetween(0, 2);
+        
+        cout << "AFTER:     ";
+        list.printList();
+        
+        checkTestResult(list.getLength() == 0);
+    }
+
+    // Test: ReverseBetweenSingleElement
+    {
+        cout << "\n------ Test: ReverseBetweenSingleElement ------\n";
+        cout << "reverseBetween( 0, 0 )\n";
+        
+        LinkedList list(1);
+        
+        cout << "BEFORE:    ";
+        list.printList();
+        
+        list.reverseBetween(0, 0);
+        
+        cout << "AFTER:     ";
+        list.printList();
+        
+        LinkedListNode* head = list.getHead();
+        checkTestResult(head && head->value == 1);
+    }
+
+    // Test: ReverseBetweenBothArgumentsSameNumber
+    {
+        cout << "\n------ Test: ReverseBetweenBothArgumentsSameNumber ------\n";
+        cout << "reverseBetween( 1, 1 )\n";
+        
+        LinkedList list(1);
+        list.append(2);
+        list.append(3);
+        
+        cout << "BEFORE:    ";
+        list.printList();
+        
+        list.reverseBetween(1, 1);
+        
+        cout << "AFTER:     ";
+        list.printList();
+        
+        LinkedListNode* head = list.getHead();
+        checkTestResult(
+          head && 
+          head->value == 1 && 
+          head->next->value == 2 && 
+          head->next->next->value == 3
+        );
+    }
+
+    // Test: ReverseBetweenMultipleElements
+    {
+        cout << "\n------ Test: ReverseBetweenMultipleElements ------\n";
+        cout << "reverseBetween( 1, 4 )\n";
+        
+        LinkedList list(1);
+        list.append(2);
+        list.append(3);
+        list.append(4);
+        list.append(5);
+        list.append(6);
+        
+        cout << "BEFORE:    ";
+        list.printList();
+        
+        list.reverseBetween(1, 4);
+        
+        cout << "AFTER:     ";
+        list.printList();
+        
+        // Check condition
+        LinkedListNode* head = list.getHead();
+        checkTestResult(
+          head && 
+          head->value == 1 &&
+          head->next->value == 5 &&
+          head->next->next->value == 4 &&
+          head->next->next->next->value == 3 &&
+          head->next->next->next->next->value == 2 && 
+          head->next->next->next->next->next->value == 6
+        );
+    }
+
+    // Test: ReverseBetweenStartAtZero
+    {
+        cout << "\n------ Test: ReverseBetweenStartAtZero ------\n";
+        cout << "reverseBetween( 0, 2 )\n";
+        
+        LinkedList list(1);
+        list.append(2);
+        list.append(3);
+        list.append(4);
+        
+        cout << "BEFORE:    ";
+        list.printList();
+        
+        list.reverseBetween(0, 2);
+        
+        cout << "AFTER:     ";
+        list.printList();
+        
+        // Check condition
+        LinkedListNode* head = list.getHead();
+        checkTestResult(
+          head && 
+          head->value == 3 &&
+          head->next->value == 2 &&
+          head->next->next->value == 1 &&
+          head->next->next->next->value == 4
+        );
+    }
+
+    // Test: ReverseBetweenEndAtLast
+    {
+        cout << "\n------ Test: ReverseBetweenMiddleToLast ------\n";
+        cout << "reverseBetween( 1, 2 )\n";
+        
+        LinkedList list(1);
+        list.append(2);
+        list.append(3);
+        
+        cout << "BEFORE:    ";
+        list.printList();
+        
+        list.reverseBetween(1, 2);
+        
+        cout << "AFTER:     ";
+        list.printList();
+        
+        // Check condition
+        LinkedListNode* head = list.getHead();
+        checkTestResult(
+          head && 
+          head->value == 1 &&
+          head->next->value == 3 &&
+          head->next->next->value == 2
+        );
+    }
+
+     // Test: BinaryToDecimalEmptyList
+    {
+        cout << "\n------ Test: BinaryToDecimalEmptyList ------\n";
+        
+        LinkedList list(1);
+        list.makeEmpty();
+        
+        cout << "BINARY:    ";
+        list.printList();
+        
+        int decimal = list.binaryToDecimal();
+        
+        cout << "DECIMAL:   " << decimal << endl;
+        
+        checkTestResult(decimal == 0);
+    }
+
+    // Test: BinaryToDecimalSingleElement
+    {
+        cout << "\n------ Test: BinaryToDecimalSingleElement ------\n";
+        
+        LinkedList list(1);
+        
+        cout << "BINARY:    ";
+        list.printList();
+        
+        int decimal = list.binaryToDecimal();
+        
+        cout << "DECIMAL:   " << decimal << endl;
+        
+        checkTestResult(decimal == 1);
+    }
+
+    // Test: BinaryToDecimalMultipleElements
+    {
+        cout << "\n------ Test: BinaryToDecimalMultipleElements ------\n";
+        
+        LinkedList list(1);
+        list.append(0);
+        list.append(1);
+        list.append(1);
+        
+        cout << "BINARY:    ";
+        list.printList();
+        
+        int decimal = list.binaryToDecimal();
+        
+        cout << "DECIMAL:   " << decimal << endl;
+        
+        checkTestResult(decimal == 11);
+    }
+
+    // Test: BinaryToDecimalAllZeros
+    {
+        cout << "\n------ Test: BinaryToDecimalAllZeros ------\n";
+        
+        LinkedList list(0);
+        list.append(0);
+        list.append(0);
+        list.append(0);
+        
+        cout << "BINARY:    ";
+        list.printList();
+        
+        int decimal = list.binaryToDecimal();
+        
+        cout << "DECIMAL:   " << decimal << endl;
+        
+        checkTestResult(decimal == 0);
+    }
+
+    // Test: BinaryToDecimalAllOnes
+    {
+        cout << "\n------ Test: BinaryToDecimalAllOnes ------\n";
+        
+        LinkedList list(1);
+        list.append(1);
+        list.append(1);
+        list.append(1);
+        
+        cout << "BINARY:    ";
+        list.printList();
+        
+        int decimal = list.binaryToDecimal();
+        
+        cout << "DECIMAL:   " << decimal << endl;
+        
+        checkTestResult(decimal == 15);
+    }
 
     //Test for partitionList Leetcode problem
     LinkedList* myList = new LinkedList(10);
@@ -396,7 +719,96 @@ int main() {
         mList->partitionList(9);
         mList->printList();
     }
-/*
+
+    // Test: RemoveDuplicatesEmptyList
+    {
+        cout << "\n------ Test: RemoveDuplicatesEmptyList ------\n";
+        
+        LinkedList list(1);
+        list.makeEmpty();
+        
+        cout << "BEFORE:    ";
+        list.printList();
+        
+        list.removeDuplicates();
+        
+        cout << "AFTER:     ";
+        list.printList();
+        
+        LinkedListNode* head = list.getHead();
+        checkTestResult(head == nullptr);
+    }
+
+    // Test: RemoveDuplicatesSingleElement
+    {
+        cout << "\n------ Test: RemoveDuplicatesSingleElement ------\n";
+        
+        LinkedList list(1);
+        
+        cout << "BEFORE:    ";
+        list.printList();
+        
+        list.removeDuplicates();
+        
+        cout << "AFTER:     ";
+        list.printList();
+        
+        LinkedListNode* head = list.getHead();
+        checkTestResult(head && head->value == 1);
+    }
+
+    // Test: RemoveDuplicatesNoDuplicates
+    {
+        cout << "\n------ Test: RemoveDuplicatesNoDuplicates ------\n";
+        
+        LinkedList list(1);
+        list.append(2);
+        list.append(3);
+        
+        cout << "BEFORE:    ";
+        list.printList();
+        
+        list.removeDuplicates();
+        
+        cout << "AFTER:     ";
+        list.printList();
+        
+        LinkedListNode* head = list.getHead();
+        checkTestResult(head && head->value == 1);
+    }
+
+    // Test: RemoveDuplicatesHasDuplicates
+    {
+        cout << "\n------ Test: RemoveDuplicatesHasDuplicates ------\n";
+        
+        LinkedList list(1);
+        list.append(2);
+        list.append(2);
+        list.append(3);
+        
+        cout << "BEFORE:    ";
+        list.printList();
+        
+        list.removeDuplicates();
+        
+        cout << "AFTER:     ";
+        list.printList();
+        
+        // Check for duplicates
+        LinkedListNode* current = list.getHead();
+        bool noDuplicates = true;
+        
+        while (current && current->next) {
+            if (current->value == current->next->value) {
+                noDuplicates = false;
+                break;
+            }
+            current = current->next;
+        }
+        
+        checkTestResult(noDuplicates);
+    }
+
     //Test for append
     // Test 1: Append To Non-Empty List
     {
@@ -1030,6 +1442,6 @@ int main() {
 
         checkTestResult(result);
     }
-*/
+
     return 0;
 }
