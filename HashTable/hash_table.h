@@ -21,4 +21,13 @@ public:
 
   // interview question: find if both vector have same element
   bool itemInCommon(std::vector<int> vec1, std::vector<int> vec2);
+  vector<int> findDuplicates(const vector<int>& nums);
+  char firstNonRepeatingChar(const string& input_string);
+  vector<vector<string>> groupAnagrams(const vector<string>& strings);
+  vector<int> twoSum(const vector<int>& nums, int target);
+  vector<int> subarraySum(const vector<int>& nums, int target);
+  vector<int> removeDuplicates(const vector<int>& myList);
+  bool hasUniqueChars(const string& str);
+  vector<vector<int>> findPairs(const vector<int>& arr1, const vector<int>& arr2, int target);
+  int longestConsecutiveSequence(const vector<int>& nums);
 };
