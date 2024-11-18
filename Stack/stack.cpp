@@ -1,5 +1,7 @@
 #include "stack.h"
 #include <string>
+#include <vector>
+#include <stack>
 
 using namespace std;
 
@@ -77,6 +79,71 @@ int Stack::pop()
         delete temp;
         mHeight--;
         return popped_value;
+    }
+}
+
+/************************ leetcode problems ***************************************/
+string reverseString(const string& str) {
+    //   +=====================================================+
+    //   |                 WRITE YOUR CODE HERE                |
+    //   | Description:                                        |
+    //   | - This function reverses the input string 'str'.    |
+    //   | - Uses a stack to hold the characters.              |
+    //   | - Pops from stack and appends to 'reversedString'.  |
+    //   | - Return type: string                               |
+    //   |                                                     |
+    //   | Tips:                                               |
+    //   | - Use a stack to hold each character of the string. |
+    //   | - Push each character of 'str' onto the stack.      |
+    //   | - Pop from the stack and append to 'reversedString' |
+    //   |   until the stack is empty.                         |
+    //   | - Return the reversed string.                       |
+    //   | - Check output from Test.cpp in "User logs".        |
+    //   +=====================================================+
+
+    std::vector<char>stack;
+    for(auto character:str)
+    {
+        stack.push_back(character);
+    }
+    std::string reverse="";
+    while(!stack.empty())
+    {
+        reverse+=stack.back();
+        stack.pop_back();
+    }
+    return reverse;
+}
+
+bool isBalancedParentheses(const string& parentheses) {
+    int openParentheses=0;
+    for(auto character:parentheses)
+    {
+        if(character=='(') openParentheses+=1;
+        if(character==')') openParentheses-=1;
+        if(openParentheses<0) return false;
+    }
+    return (openParentheses==0) ? true: false;
+}
+
+void sortStack(stack<int>& inputStack) {
+    stack<int> additionalStack;
+    while(!inputStack.empty())
+    {
+        additionalStack.push(inputStack.top());
+        inputStack.pop();
+    }
+
+    while(!additionalStack.empty())
+    {
+        int temp=additionalStack.top();
+        additionalStack.pop();
+        while(!inputStack.empty()&&temp>inputStack.top())
+        {
+            additionalStack.push(inputStack.top());
+            inputStack.pop();
+        }
+        inputStack.push(temp);
     }
 }
 
@@ -230,6 +297,272 @@ int main()
         cout << "Top after pop from empty stack: " << (stack.getTop() == nullptr ? "nullptr" : "not nullptr") << " - EXPECTED: nullptr\n";
         cout << "Height after pop from empty stack: " << stack.getHeight() << " - EXPECTED: 0\n";
         cout << ((poppedValue == INT_MIN) && (stack.getTop() == nullptr) && (stack.getHeight() == 0) ? "PASS\n" : "FAIL\n");
+    }
+
+    cout << "\n----- Test: Empty Parentheses -----\n";
+    {
+        string input = "";
+        cout << "Input: \"" << input << "\"\n";
+        cout << "Output: " << (isBalancedParentheses(input) ? "Balanced" : "Unbalanced") << " - EXPECTED: Balanced\n";
+        cout << (isBalancedParentheses(input) ? "PASS\n" : "FAIL\n");
+    }
+
+    cout << "\n----- Test: Balanced Parentheses -----\n";
+    {
+        string inputs[] = {"()", "(())", "(()(()))"};
+        for (const string &input : inputs) {
+            cout << "Input: \"" << input << "\"\n";
+            cout << "Output: " << (isBalancedParentheses(input) ? "Balanced" : "Unbalanced") << " - EXPECTED: Balanced\n";
+            cout << (isBalancedParentheses(input) ? "PASS\n" : "FAIL\n");
+        }
+    }
+
+    cout << "\n----- Test: Unbalanced Opening Parentheses -----\n";
+    {
+        string inputs[] = {"(", "(()", "((())"};
+        for (const string &input : inputs) {
+            cout << "Input: \"" << input << "\"\n";
+            cout << "Output: " << (isBalancedParentheses(input) ? "Balanced" : "Unbalanced") << " - EXPECTED: Unbalanced\n";
+            cout << (!isBalancedParentheses(input) ? "PASS\n" : "FAIL\n");
+        }
+    }
+
+    cout << "\n----- Test: Unbalanced Closing Parentheses -----\n";
+    {
+        string inputs[] = {")", "())", "(()))"};
+        for (const string &input : inputs) {
+            cout << "Input: \"" << input << "\"\n";
+            cout << "Output: " << (isBalancedParentheses(input) ? "Balanced" : "Unbalanced") << " - EXPECTED: Unbalanced\n";
+            cout << (!isBalancedParentheses(input) ? "PASS\n" : "FAIL\n");
+        }
+    }
+
+    cout << "\n----- Test: Mixed Parentheses -----\n";
+    {
+        string balancedInput = "()()";
+        string unbalancedInputs[] = {"()(", "())()"};
+
+        cout << "Input: \"" << balancedInput << "\"\n";
+        cout << "Output: " << (isBalancedParentheses(balancedInput) ? "Balanced" : "Unbalanced") << " - EXPECTED: Balanced\n";
+        cout << (isBalancedParentheses(balancedInput) ? "PASS\n" : "FAIL\n");
+
+        for (const string &input : unbalancedInputs) {
+            cout << "Input: \"" << input << "\"\n";
+            cout << "Output: " << (isBalancedParentheses(input) ? "Balanced" : "Unbalanced") << " - EXPECTED: Unbalanced\n";
+            cout << (!isBalancedParentheses(input) ? "PASS\n" : "FAIL\n");
+        }
+    }
+
+    cout << "\n----- Test: Already Sorted -----\n";
+    {
+        stack<int> s;
+        s.push(3);
+        s.push(2);
+        s.push(1);
+        sortStack(s);
+        int expected[] = {1, 2, 3};
+        bool pass = true;
+        for (int i : expected) {
+            if (s.top() != i) {
+                pass = false;
+                break;
+            }
+            s.pop();
+        }
+        cout << (pass ? "PASS\n" : "FAIL\n");
+    }
+
+    cout << "\n----- Test: Unsorted Stack -----\n";
+    {
+        stack<int> s;
+        s.push(1);
+        s.push(3);
+        s.push(2);
+        sortStack(s);
+        int expected[] = {1, 2, 3};
+        bool pass = true;
+        for (int i : expected) {
+            if (s.top() != i) {
+                pass = false;
+                break;
+            }
+            s.pop();
+        }
+        cout << (pass ? "PASS\n" : "FAIL\n");
+    }
+
+    cout << "\n----- Test: Reverse Empty String -----\n";
+    {
+        string input = "";
+        cout << "Input: \"" << input << "\"\n";
+        cout << "Output: \"" << reverseString(input) << "\" - EXPECTED: \"\"\n";
+        cout << (reverseString(input) == "" ? "PASS\n" : "FAIL\n");
+    }
+
+    cout << "\n----- Test: Reverse Single Character String -----\n";
+    {
+        string input = "A";
+        cout << "Input: \"" << input << "\"\n";
+        cout << "Output: \"" << reverseString(input) << "\" - EXPECTED: \"A\"\n";
+        cout << (reverseString(input) == "A" ? "PASS\n" : "FAIL\n");
+    }
+
+    cout << "\n----- Test: Reverse Two Character String -----\n";
+    {
+        string input = "AB";
+        cout << "Input: \"" << input << "\"\n";
+        cout << "Output: \"" << reverseString(input) << "\" - EXPECTED: \"BA\"\n";
+        cout << (reverseString(input) == "BA" ? "PASS\n" : "FAIL\n");
+    }
+
+    cout << "\n----- Test: Reverse Multiple Character String -----\n";
+    {
+        string input = "Hello, World!";
+        cout << "Input: \"" << input << "\"\n";
+        cout << "Output: \"" << reverseString(input) << "\" - EXPECTED: \"!dlroW ,olleH\"\n";
+        cout << (reverseString(input) == "!dlroW ,olleH" ? "PASS\n" : "FAIL\n");
+    }
+
+    cout << "\n----- Test: Reverse String With Whitespace -----\n";
+    {
+        string input = "  A B C  ";
+        cout << "Input: \"" << input << "\"\n";
+        cout << "Output: \"" << reverseString(input) << "\" - EXPECTED: \"  C B A  \"\n";
+        cout << (reverseString(input) == "  C B A  " ? "PASS\n" : "FAIL\n");
+    }
+
+    cout << "\n----- Test: Reverse String With Special Characters -----\n";
+    {
+        string input = "@#$%^&*()";
+        cout << "Input: \"" << input << "\"\n";
+        cout << "Output: \"" << reverseString(input) << "\" - EXPECTED: \")(*&^%$#@\"\n";
+        cout << (reverseString(input) == ")(*&^%$#@" ? "PASS\n" : "FAIL\n");
+    }
+
+    cout << "\n----- Test: Empty Parentheses -----\n";
+    {
+        string input = "";
+        cout << "Input: \"" << input << "\"\n";
+        cout << "Output: " << (isBalancedParentheses(input) ? "Balanced" : "Unbalanced") << " - EXPECTED: Balanced\n";
+        cout << (isBalancedParentheses(input) ? "PASS\n" : "FAIL\n");
+    }
+
+    cout << "\n----- Test: Balanced Parentheses -----\n";
+    {
+        string inputs[] = {"()", "(())", "(()(()))"};
+        for (const string &input : inputs) {
+            cout << "Input: \"" << input << "\"\n";
+            cout << "Output: " << (isBalancedParentheses(input) ? "Balanced" : "Unbalanced") << " - EXPECTED: Balanced\n";
+            cout << (isBalancedParentheses(input) ? "PASS\n" : "FAIL\n");
+        }
+    }
+
+    cout << "\n----- Test: Unbalanced Opening Parentheses -----\n";
+    {
+        string inputs[] = {"(", "(()", "((())"};
+        for (const string &input : inputs) {
+            cout << "Input: \"" << input << "\"\n";
+            cout << "Output: " << (isBalancedParentheses(input) ? "Balanced" : "Unbalanced") << " - EXPECTED: Unbalanced\n";
+            cout << (!isBalancedParentheses(input) ? "PASS\n" : "FAIL\n");
+        }
+    }
+
+    cout << "\n----- Test: Unbalanced Closing Parentheses -----\n";
+    {
+        string inputs[] = {")", "())", "(()))"};
+        for (const string &input : inputs) {
+            cout << "Input: \"" << input << "\"\n";
+            cout << "Output: " << (isBalancedParentheses(input) ? "Balanced" : "Unbalanced") << " - EXPECTED: Unbalanced\n";
+            cout << (!isBalancedParentheses(input) ? "PASS\n" : "FAIL\n");
+        }
+    }
+
+    cout << "\n----- Test: Mixed Parentheses -----\n";
+    {
+        string balancedInput = "()()";
+        string unbalancedInputs[] = {"()(", "())()"};
+
+        cout << "Input: \"" << balancedInput << "\"\n";
+        cout << "Output: " << (isBalancedParentheses(balancedInput) ? "Balanced" : "Unbalanced") << " - EXPECTED: Balanced\n";
+        cout << (isBalancedParentheses(balancedInput) ? "PASS\n" : "FAIL\n");
+
+        for (const string &input : unbalancedInputs) {
+            cout << "Input: \"" << input << "\"\n";
+            cout << "Output: " << (isBalancedParentheses(input) ? "Balanced" : "Unbalanced") << " - EXPECTED: Unbalanced\n";
+            cout << (!isBalancedParentheses(input) ? "PASS\n" : "FAIL\n");
+        }
+    }
+
+    cout << "\n----- Test: Empty Stack -----\n";
+    {
+        stack<int> s;
+        sortStack(s);
+        cout << "Stack is " << (s.empty() ? "empty" : "not empty") << " - EXPECTED: empty\n";
+        cout << (s.empty() ? "PASS\n" : "FAIL\n");
+    }
+
+    cout << "\n----- Test: Single Element -----\n";
+    {
+        stack<int> s;
+        s.push(42);
+        sortStack(s);
+        cout << "Top element: " << s.top() << " - EXPECTED: 42\n";
+        cout << (s.top() == 42 ? "PASS\n" : "FAIL\n");
+    }
+
+    cout << "\n----- Test: Already Sorted -----\n";
+    {
+        stack<int> s;
+        s.push(3);
+        s.push(2);
+        s.push(1);
+        sortStack(s);
+        int expected[] = {1, 2, 3};
+        bool pass = true;
+        for (int i : expected) {
+            if (s.top() != i) {
+                pass = false;
+                break;
+            }
+            s.pop();
+        }
+        cout << (pass ? "PASS\n" : "FAIL\n");
+    }
+
+    cout << "\n----- Test: Unsorted Stack -----\n";
+    {
+        stack<int> s;
+        s.push(1);
+        s.push(3);
+        s.push(2);
+        sortStack(s);
+        int expected[] = {1, 2, 3};
+        bool pass = true;
+        for (int i : expected) {
+            if (s.top() != i) {
+                pass = false;
+                break;
+            }
+            s.pop();
+        }
+        cout << (pass ? "PASS\n" : "FAIL\n");
+    }
+
+    cout << "\n----- Test: All Equal Elements -----\n";
+    {
+        stack<int> s;
+        s.push(5);
+        s.push(5);
+        s.push(5);
+        sortStack(s);
+        bool pass = true;
+        while (!s.empty() && pass) {
+            if (s.top() != 5) {
+                pass = false;
+            }
+            s.pop();
+        }
+        cout << (pass ? "PASS\n" : "FAIL\n");
     }
     return 0;
 }

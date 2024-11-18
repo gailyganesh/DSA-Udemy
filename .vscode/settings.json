@@ -55,7 +55,8 @@
         "functional": "cpp",
         "deque": "cpp",
         "sstream": "cpp",
-        "strstream": "cpp"
+        "strstream": "cpp",
+        "stack": "cpp"
     },
     "notebook.formatOnSave.enabled": true,
     "editor.defaultFormatter": "xaver.clang-format",
