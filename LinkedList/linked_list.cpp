@@ -1,5 +1,6 @@
 #include "linked_list.h"
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -224,6 +225,7 @@ void LinkedList::deleteNode(int index)
     }
 }
 
+/************************ leetcode problems ***************************************/
 void LinkedList::reverse_on2()
 {
     if(mLength<=1) return;
@@ -446,6 +448,136 @@ void LinkedList::reverseBetween(int m, int n)
     }
 }
 
+void LinkedList::bubbleSort()
+{
+    if(mHead==nullptr || mHead->next==nullptr) return;
+    LinkedListNode* endNode=nullptr;
+    while(true)
+    {
+        auto current=mHead;
+        auto nextNode=current->next;
+        while(true)
+        {
+            if(current->value>nextNode->value)
+            {
+                auto temp=current->value;
+                current->value=nextNode->value;
+                nextNode->value=temp;
+            }
+            current=nextNode;
+            nextNode=current->next;
+            if(nextNode==endNode)
+            {
+                endNode=current;
+                break;
+            }
+        }
+        if(endNode==mHead->next) return;
+    }
+}
+
+void LinkedList::selectionSort()
+{
+    if(!mHead) return;
+    auto currentNode=mHead;
+    while(currentNode->next)
+    {
+        auto lowestValueNode=currentNode;
+        auto IteratorNode=currentNode->next;
+        while(IteratorNode)
+        {
+            if(IteratorNode->value<currentNode->value)
+            {
+                lowestValueNode=IteratorNode;
+            }
+            IteratorNode=IteratorNode->next;
+        }
+        if(currentNode!=lowestValueNode)
+        {
+           auto temp=currentNode->value;
+           currentNode->value=lowestValueNode->value;
+           lowestValueNode->value=temp;
+        }
+        currentNode=currentNode->next;
+    }
+}
+
+void LinkedList::insertionSort() {
+    if (mLength < 2) {
+        return;
+    }
+
+    LinkedListNode* sortedListHead = mHead;
+    LinkedListNode* unsortedListHead = mHead->next;
+    sortedListHead->next = nullptr;
+
+    while (unsortedListHead != nullptr) {
+        LinkedListNode* current = unsortedListHead;
+        unsortedListHead = unsortedListHead->next;
+
+        if (current->value < sortedListHead->value) {
+            current->next = sortedListHead;
+            sortedListHead = current;
+        } else {
+            LinkedListNode* searchPointer = sortedListHead;
+            while (searchPointer->next != nullptr && current->value > searchPointer->next->value) {
+                searchPointer = searchPointer->next;
+            }
+            current->next = searchPointer->next;
+            searchPointer->next = current;
+        }
+    }
+
+    mHead = sortedListHead;
+    LinkedListNode* temp = mHead;
+    while (temp->next != nullptr) {
+        temp = temp->next;
+    }
+    mTail = temp;
+}
+
+void LinkedList::merge(LinkedList &otherList)
+{
+    auto Iterator1=mHead;
+    LinkedListNode* prevIter1=nullptr;
+    auto Iterator2=otherList.getHead();
+    while(Iterator1 && Iterator2)
+    {
+        if(Iterator2->value<Iterator1->value)
+        {
+            auto temp=Iterator2->next;
+            if(prevIter1)
+            {
+                prevIter1->next=Iterator2;
+                Iterator2->next=Iterator1;
+            }
+            else
+            {
+                Iterator2->next=Iterator1;
+                mHead=Iterator2;
+                prevIter1=Iterator2;
+            }
+            Iterator2=temp;
+        }
+        else
+        {
+            prevIter1=Iterator1;
+            Iterator1=Iterator1->next;
+        }
+    }
+
+    if(mHead == nullptr) mHead=otherList.mHead;
+    if(Iterator2)
+    {
+        if(prevIter1) prevIter1->next=Iterator2;
+        mTail=otherList.getTail();
+    }
+    otherList.mHead=nullptr;
+    otherList.mTail=nullptr;
+    mLength+=otherList.mLength;
+    otherList.mLength=0;
+}
+
 // Function to convert nullptr to 0 for comparison
 auto ptrToNum = [](LinkedListNode* ptr) -> string {
     return (ptr == nullptr) ? "0 (nullptr)" : std::to_string(ptr->value);
@@ -456,6 +588,170 @@ auto checkTestResult = [](bool condition) {
     cout << (condition ? "PASS" : "FAIL") << endl;
 };
 
+// Function to convert linked list to vector
+    auto listToVector = [](LinkedList& list) {
+        vector<int> result;
+        LinkedListNode* current = list.getHead();
+        while (current != nullptr) {
+            result.push_back(current->value);
+            current = current->next;
+        }
+        return result;
+    };
+
+/************************ leetcode problems for vector ***************************************/
+void removeElement(vector<int>& nums, int val) {
+	//   +=====================================================+
+	//   |                 WRITE YOUR CODE HERE                |
+	//   | Description:                                        |
+	//   | - This function removes all occurrences of a        |
+	//   |   given value ('val') from an integer vector.       |
+	//   | - It modifies the input vector 'nums'.              |
+	//   |                                                     |
+	//   | Return type: void                                   |
+	//   |                                                     |
+	//   | Tips:                                               |
+	//   | - Uses two pointers 'i' and 'j' for traversal.      |
+	//   | - 'i' points to the last element that is not 'val'. |
+	//   | - 'j' is used for iterating over the array.         |
+	//   | - Check output from Test.cpp in "User logs".        |
+	//   +=====================================================+
+	int i=0;
+	for(int j=0; j<nums.size();j++)
+	{
+	    if(nums[j] != val)
+	    {
+	        nums[i]=nums[j];
+	        i++;
+	    }
+	}
+	nums.resize(i);
+}
+
+vector<int> findMaxMin(vector<int>& myList) {
+	//   +=====================================================+
+	//   |                 WRITE YOUR CODE HERE                |
+	//   | Description:                                        |
+	//   | - This function finds the maximum and minimum       |
+	//   |   values in a given list of integers.               |
+	//   | - It uses a single loop to go through the list.     |
+	//   |                                                     |
+	//   | Return type: vector<int>                            |
+	//   | - Returns a vector containing maximum and minimum.  |
+	//   |                                                     |
+	//   | Tips:                                               |
+	//   | - 'maximum' and 'minimum' keep track of the         |
+	//   |   highest and lowest values found.                  |
+	//   | - Check output from Test.cpp in "User logs".        |
+	//   +=====================================================+
+    int max=INT_MIN;
+    int min=INT_MAX;
+    for (auto val:myList)
+    {
+        if(val>max) max=val;
+        if(val<min) min=val;
+    }
+    return {max,min};
+}
+
+string findLongestString(vector<string>& stringList) {
+	//   +=====================================================+
+	//   |                 WRITE YOUR CODE HERE                |
+	//   | Description:                                        |
+	//   | - This function finds the longest string in         |
+	//   |   a given list of strings.                          |
+	//   | - It uses a single loop to check the length         |
+	//   |   of each string.                                   |
+	//   |                                                     |
+	//   | Return type: string                                 |
+	//   | - Returns the longest string found in the list.     |
+	//   |                                                     |
+	//   | Tips:                                               |
+	//   | - 'longestString' keeps track of the longest        |
+	//   |   string found so far.                              |
+	//   | - Check output from Test.cpp in "User logs".        |
+	//   +=====================================================+
+    int longest=0;
+    std::string longestString="";
+    for (auto val:stringList)
+    {
+        int length=0;
+        for(auto ch:val) length++;
+        if(length>longest)
+        {
+            longest=length;
+            longestString=val;
+        }
+    }
+    return longestString;
+}
+
+int removeDuplicates(vector<int>& nums) {
+	//   +=====================================================+
+	//   |                 WRITE YOUR CODE HERE                |
+	//   | Description:                                        |
+	//   | - This function removes duplicate integers          |
+	//   |   from a sorted array in-place.                     |
+	//   | - It uses two pointers to achieve this.             |
+	//   |                                                     |
+	//   | Return type: int                                    |
+	//   | - Returns the length of the new array.              |
+	//   |                                                     |
+	//   | Tips:                                               |
+	//   | - 'writePointer' is used for storing unique values. |
+	//   | - 'readPointer' is used for reading array values.   |
+	//   | - Check output from Test.cpp in "User logs".        |
+	//   +=====================================================+
+    if (nums.size() == 0) {
+        return 0;
+    }
+ 
+    int writePointer = 1;
+ 
+    for (int readPointer = 1; readPointer < nums.size(); readPointer++) {
+        if (nums[readPointer] != nums[readPointer - 1]) {
+            nums[writePointer] = nums[readPointer];
+            writePointer++;
+        }
+    }
+ 
+    return writePointer;
+}
+
+int maxProfit(vector<int>& prices) {
+	//   +=====================================================+
+	//   |                 WRITE YOUR CODE HERE                |
+	//   | Description:                                        |
+	//   | - This function calculates the maximum profit       |
+	//   |   from buying and selling a stock.                  |
+	//   | - It iterates through the 'prices' array once.      |
+	//   |                                                     |
+	//   | Return type: int                                    |
+	//   |                                                     |
+	//   | Tips:                                               |
+	//   | - 'minPrice' keeps track of the lowest price.       |
+	//   | - 'maxProfit' stores the maximum profit found.      |
+	//   | - Use 'min' and 'max' functions to update values.   |
+	//   | - Check output from Test.cpp in "User logs".        |
+	//   +=====================================================+
+    int minPrice=INT_MAX;
+    int maxProfit=0;
+    //prices: [7,1,5,3,6,4]
+    for (int i=0; i<prices.size(); i++)
+    {
+        if(prices[i]<minPrice)
+        {
+            minPrice=prices[i];
+            maxProfit=0;
+        }
+        else {
+            int diff=prices[i]-minPrice;
+            if(diff>maxProfit)maxProfit=diff;
+        }
+        
+    }
+    return maxProfit;
+}
 int main() {
 
     // Test: ReverseBetweenEmptyList
@@ -1443,5 +1739,323 @@ int main() {
         checkTestResult(result);
     }
 
+    // Test 1: EmptyList
+    {
+        cout << "\n------ Test: EmptyList ------\n";
+
+        LinkedList list(0);
+        list.deleteFirst();
+
+        cout << "Before: ";
+        list.printList();
+
+        list.bubbleSort();
+
+        cout << "After: ";
+        list.printList();
+
+        checkTestResult(list.getLength() == 0);
+    }
+
+    // Test 2: SingleElement
+    {
+        cout << "\n------ Test: SingleElement ------\n";
+
+        LinkedList list(5);
+
+        cout << "Before: ";
+        list.printList();
+
+        list.bubbleSort();
+
+        cout << "After: ";
+        list.printList();
+
+        checkTestResult(list.getHead()->value == 5 && list.getTail()->value == 5);
+    }
+
+    // Test 3: TwoElements
+    {
+        cout << "\n------ Test: TwoElements ------\n";
+
+        LinkedList list(5);
+        list.append(3);
+
+        cout << "Before: ";
+        list.printList();
+
+        list.bubbleSort();
+
+        cout << "After: ";
+        list.printList();
+
+        checkTestResult(listToVector(list) == vector<int>({3, 5}));
+    }
+
+    // Test 4: MultipleElements
+    {
+        cout << "\n------ Test: MultipleElements ------\n";
+
+        LinkedList list(5);
+        list.append(3);
+        list.append(8);
+        list.append(1);
+
+        cout << "Before: ";
+        list.printList();
+
+        list.bubbleSort();
+
+        cout << "After: ";
+        list.printList();
+
+        checkTestResult(listToVector(list) == vector<int>({1, 3, 5, 8}));
+    }
+
+    // Test 5: AlreadySorted
+    {
+        cout << "\n------ Test: AlreadySorted ------\n";
+
+        LinkedList list(1);
+        list.append(3);
+        list.append(5);
+        list.append(8);
+
+        cout << "Before: ";
+        list.printList();
+
+        list.bubbleSort();
+
+        cout << "After: ";
+        list.printList();
+
+        checkTestResult(listToVector(list) == vector<int>({1, 3, 5, 8}));
+    }
+
+    // Test 6: Reversed
+    {
+        cout << "\n------ Test: Reversed ------\n";
+
+        LinkedList list(8);
+        list.append(5);
+        list.append(3);
+        list.append(1);
+
+        cout << "Before: ";
+        list.printList();
+
+        list.bubbleSort();
+
+        cout << "After: ";
+        list.printList();
+
+        checkTestResult(listToVector(list) == vector<int>({1, 3, 5, 8}));
+    }
+
+    // Test 1: EmptyList
+    {
+        cout << "\n------ Test: EmptyList ------\n";
+
+        LinkedList list(0);
+        list.deleteFirst();
+
+        cout << "Before: ";
+        list.printList();
+
+        list.selectionSort();
+
+        cout << "After: ";
+        list.printList();
+
+        checkTestResult(list.getLength() == 0);
+    }
+
+    // Test 2: SingleElement
+    {
+        cout << "\n------ Test: SingleElement ------\n";
+
+        LinkedList list(5);
+
+        cout << "Before: ";
+        list.printList();
+
+        list.selectionSort();
+
+        cout << "After: ";
+        list.printList();
+
+        checkTestResult(list.getHead()->value == 5 && list.getTail()->value == 5);
+    }
+
+    // Test 3: TwoElements
+    {
+        cout << "\n------ Test: TwoElements ------\n";
+
+        LinkedList list(5);
+        list.append(3);
+
+        cout << "Before: ";
+        list.printList();
+
+        list.selectionSort();
+
+        cout << "After: ";
+        list.printList();
+
+        checkTestResult(listToVector(list) == vector<int>({3, 5}));
+    }
+
+    // Test 4: MultipleElements
+    {
+        cout << "\n------ Test: MultipleElements ------\n";
+
+        LinkedList list(5);
+        list.append(3);
+        list.append(8);
+        list.append(1);
+
+        cout << "Before: ";
+        list.printList();
+
+        list.selectionSort();
+
+        cout << "After: ";
+        list.printList();
+
+        checkTestResult(listToVector(list) == vector<int>({1, 3, 5, 8}));
+    }
+
+    // Test 5: AlreadySorted
+    {
+        cout << "\n------ Test: AlreadySorted ------\n";
+
+        LinkedList list(1);
+        list.append(3);
+        list.append(5);
+        list.append(8);
+
+        cout << "Before: ";
+        list.printList();
+
+        list.selectionSort();
+
+        cout << "After: ";
+        list.printList();
+
+        checkTestResult(listToVector(list) == vector<int>({1, 3, 5, 8}));
+    }
+
+    // Test 6: Reversed
+    {
+        cout << "\n------ Test: Reversed ------\n";
+
+        LinkedList list(8);
+        list.append(5);
+        list.append(3);
+        list.append(1);
+
+        cout << "Before: ";
+        list.printList();
+
+        list.selectionSort();
+
+        cout << "After: ";
+        list.printList();
+
+        checkTestResult(listToVector(list) == vector<int>({1, 3, 5, 8}));
+    }
+
+    // Test 1: MergeTwoEmptyLists
+    {
+        cout << "\n------ Test: MergeTwoEmptyLists ------\n";
+
+        LinkedList list1(0);
+        list1.deleteFirst();
+        LinkedList list2(0);
+        list2.deleteFirst();
+
+        cout << "List1: ";
+        list1.printList();
+
+        cout << "List2: ";
+        list2.printList();
+
+        list1.merge(list2);
+
+        cout << "Merged: ";
+        list1.printList();
+
+        checkTestResult(list1.getLength() == 0);
+    }
+
+    // Test 2: MergeEmptyAndNonEmptyLists
+    {
+        cout << "\n------ Test: MergeEmptyAndNonEmptyLists ------\n";
+
+        LinkedList list1(0);
+        list1.deleteFirst();
+        LinkedList list2(5);
+
+        cout << "List1: ";
+        list1.printList();
+
+        cout << "List2: ";
+        list2.printList();
+
+        list1.merge(list2);
+
+        cout << "Merged: ";
+        list1.printList();
+
+        checkTestResult(list1.getLength() == 1 &&
+                        list1.getHead()->value == 5 &&
+                        list1.getTail()->value == 5);
+    }
+
+    // Test 3: MergeTwoNonEmptyLists
+    {
+        cout << "\n------ Test: MergeTwoNonEmptyLists ------\n";
+
+        LinkedList list1(3);
+        list1.append(4);
+        LinkedList list2(1);
+        list2.append(2);
+
+        cout << "List1: ";
+        list1.printList();
+
+        cout << "List2: ";
+        list2.printList();
+
+        list1.merge(list2);
+
+        cout << "Merged: ";
+        list1.printList();
+
+        checkTestResult(list1.getLength() == 4);  // Additional checks could be added
+    }
+
+    // Test 4: MergeDifferentLengthLists
+    {
+        cout << "\n------ Test: MergeDifferentLengthLists ------\n";
+
+        LinkedList list1(1);
+        LinkedList list2(2);
+        list2.append(3);
+        list2.append(4);
+
+        cout << "List1: ";
+        list1.printList();
+
+        cout << "List2: ";
+        list2.printList();
+
+        list1.merge(list2);
+
+        cout << "Merged: ";
+        list1.printList();
+
+        checkTestResult(list1.getLength() == 4);  // Additional checks could be added
+    }
     return 0;
 }

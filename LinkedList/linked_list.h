@@ -55,4 +55,13 @@ class LinkedList
         void removeDuplicates(); //use two pointer just like nested for loop.
         int binaryToDecimal();
         void reverseBetween(int m, int n);
+
+        void bubbleSort();
+        void selectionSort();
+        void insertionSort(); // split the list into sorted and un sorted list and move elements from unsorted to sorted properly.
+        void merge(LinkedList& otherList);
+
+/************************ leetcode problems for vector ***************************************/
+void removeElement(vector<int>& nums, int val);
+vector<int> findMaxMin(vector<int>& myList);
 };
